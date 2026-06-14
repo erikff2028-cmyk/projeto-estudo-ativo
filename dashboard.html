@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudo Ativo | Painel de Estudo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+
+        :root {
+            --verde: #006633;
+            --amarelo: #ffcc00;
+            --bg-body: #ffffff;
+            --borda: #eeeeee;
+            --texto-principal: #333333;
+            --texto-suave: #888888;
+        }
+
+        body {
+            margin: 0; font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body); color: var(--texto-principal); overflow-x: hidden;
+        }
+
+        /* --- MENU LATERAL (SIDEBAR) --- */
+        .sidebar {
+            position: fixed; top: 0; left: -280px;
+            width: 260px; height: 100%;
+            background: white; z-index: 1000;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 30px 20px; box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+        }
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--borda);
+        }
+
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
+        .sidebar-menu a {
+            text-decoration: none; color: var(--texto-principal);
+            font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 12px;
+            padding: 12px; border-radius: 12px; transition: 0.2s;
+        }
+        .sidebar-menu a:hover { background: #f0f9f2; color: var(--verde); }
+        .sidebar-menu a.logout { color: #d93025; margin-top: 20px; }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3); z-index: 999; display: none;
+        }
+        .overlay.active { display: block; }
+
+        /* --- NAVEGAÇÃO SUPERIOR --- */
+        nav {
+            padding: 15px 5%; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 1px solid var(--borda); background: #fff;
+        }
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        .menu-toggle {
+            font-size: 20px; cursor: pointer; color: var(--verde);
+            padding: 8px; border-radius: 8px; transition: 0.2s;
+        }
+        .menu-toggle:hover { background: #f5f5f5; }
+
+        .logo { font-size: 18px; font-weight: 800; text-decoration: none; color: var(--texto-principal); }
+        .logo span { color: var(--amarelo); }
+
+        .user-badge { display: flex; align-items: center; gap: 10px; }
+        .user-badge img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--verde); }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+        .header-section { margin-bottom: 40px; }
+        .header-section h1 { font-size: 26px; font-weight: 800; margin: 0; }
+        .header-section p { color: var(--texto-suave); margin-top: 5px; }
+
+        /* --- CARDS DAS DISCIPLINAS --- */
+        .grid-subjects { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .subject-card {
+            background: #fff; border: 1px solid var(--borda);
+            padding: 25px; border-radius: 24px; text-decoration: none;
+            color: inherit; transition: 0.3s ease; display: flex; flex-direction: column;
+        }
+        .subject-card:hover { transform: translateY(-5px); border-color: var(--verde); box-shadow: 0 12px 24px rgba(0,0,0,0.06); }
+        .subject-card.port-card:hover { border-color: #be123c; }
+
+        .card-header-icon { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+
+        .icon-circle {
+            width: 48px; height: 48px; background: #eefaf3; color: var(--verde);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+
+        .badge-nivel { font-size: 10px; background: #f5f5f5; padding: 4px 10px; border-radius: 20px; font-weight: 700; color: #777; }
+
+        .card-body-text h3 { margin: 0; font-size: 19px; font-weight: 700; }
+        .card-body-text p { margin: 5px 0 15px 0; font-size: 13px; color: var(--texto-suave); }
+
+        /* Barra de Progresso Interna */
+        .progress-container-alt { margin-top: auto; padding-top: 15px; border-top: 1px solid #f9f9f9; }
+        .progress-info-alt { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; font-weight: 600; }
+        .progress-track { background: #f0f0f0; height: 6px; border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--verde); border-radius: 10px; transition: width 1s ease; }
+
+        /* --- BANNER SIMULADO --- */
+        .simulado-call {
+            margin-top: 30px; padding: 25px; background: #fafafa;
+            border: 1px solid var(--borda); border-radius: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* ANIMAÇÃO DE TREMIDO PARA A CAIXA DE AVISO VERMELHA */
+        @keyframes balanco {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        /* --- ANIMAÇÃO DE BRILHO PARA O 1º LUGAR --- */
+        @keyframes brilhoOuro {
+            0% {
+                box-shadow: 0 0 8px rgba(255, 204, 0, 0.4), inset 0 0 5px rgba(255, 204, 0, 0.1);
+                border-color: #ffcc00;
+            }
+            50% {
+                box-shadow: 0 0 22px rgba(255, 204, 0, 0.8), inset 0 0 12px rgba(255, 204, 0, 0.3);
+                border-color: #ffa500;
+            }
+            100% {
+                box-shadow: 0 0 8px rgba(255, 204, 0, 0.4), inset 0 0 5px rgba(255, 204, 0, 0.1);
+                border-color: #ffcc00;
+            }
+        }
+
+        .primeiro-lugar-brilhante {
+            animation: brilhoOuro 2.5s infinite ease-in-out;
+            background: linear-gradient(90deg, #ffffff 0%, #fffef0 100%) !important;
+            border: 1px solid #ffcc00 !important;
+            position: relative;
+        }
+
+        .primeiro-lugar-brilhante::before {
+            content: "👑";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            font-size: 1.2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+        }
+
+        @media (max-width: 650px) { .grid-subjects { grid-template-columns: 1fr; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span style="font-weight: 800; color: var(--verde); font-size: 14px; letter-spacing: 1px;">MENU</span>
+            <i class="fas fa-times" onclick="toggleMenu()" style="cursor: pointer; color: #ccc;"></i>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/perfil"><i class="fas fa-user-circle"></i> Meu Perfil</a></li>
+            <li><a href="/configuracoes"><i class="fas fa-cog"></i> Configurações</a></li>
+            <li><a href="/desempenho"><i class="fas fa-chart-line"></i> Desempenho</a></li>
+            <li><a href="/suporte"><i class="fas fa-headset"></i> Suporte</a></li>
+            <hr style="border: 0; border-top: 1px solid var(--borda); margin: 20px 0;">
+            <li><a href="/logout" class="logout"><i class="fas fa-sign-out-alt"></i> Sair da Conta</a></li>
+        </ul>
+    </div>
+
+    <nav>
+        <div class="nav-left">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <a href="#" class="logo">ESTUDO<span>ATIVO</span></a>
+        </div>
+        <div class="user-badge">
+            <span style="font-size: 13px; font-weight: 600;">{{ usuario.name.split(' ')[0] }}</span>
+            <img src="{{ usuario.picture if usuario.picture else 'https://ui-avatars.com/api/?name=' + usuario.name + '&background=006633&color=fff' }}" alt="Foto do Usuário">
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Área de Estudo</h1>
+            <p>Seu progresso para o IFPI Oeiras.</p>
+        </div>
+
+        <div class="grid-subjects">
+            <a href="/matematica" class="subject-card">
+                <div class="card-header-icon">
+                    <div class="icon-circle">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <span class="badge-nivel">Básico</span>
+                </div>
+                <div class="card-body-text">
+                    <h3>Matemática</h3>
+                    <p>Cálculos, lógica e geometria.</p>
+                </div>
+                <div class="progress-container-alt">
+                    <div class="progress-info-alt">
+                        <span>Progresso</span>
+                        <strong>{{ progresso_mat }}%</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar-fill" style="width: {{ progresso_mat }}%;"></div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/portugues" class="subject-card port-card">
+                <div class="card-header-icon">
+                    <div class="icon-circle" style="background: #fff1f2; color: #be123c;">
+                        <i class="fas fa-pen-nib"></i>
+                    </div>
+                    <span class="badge-nivel">Básico</span>
+                </div>
+                <div class="card-body-text">
+                    <h3>Português</h3>
+                    <p>Gramática e interpretação.</p>
+                </div>
+                <div class="progress-container-alt">
+                    <div class="progress-info-alt">
+                        <span>Progresso</span>
+                        <strong>{{ progresso_port }}%</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar-fill" style="width: {{ progresso_port }}%; background: #be123c;"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="simulado-call">
+            <div>
+                <h4 style="margin:0; font-size: 16px;">Simulado Geral</h4>
+                <p style="margin:5px 0 0 0; font-size: 13px; color: var(--texto-suave);">40 questões inéditas padrão IFPI.</p>
+            </div>
+            <button onclick="verificarAcessoSimulado()" style="
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: linear-gradient(135deg, #006633 0%, #004d26 100%);
+                color: #ffffff;
+                font-family: 'Inter', sans-serif;
+                font-size: 1rem;
+                font-weight: 600;
+                text-decoration: none;
+                padding: 14px 36px;
+                border-radius: 10px;
+                box-shadow: 0 4px 14px rgba(0, 102, 51, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                cursor: pointer;
+                letter-spacing: -0.2px;
+            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 20px rgba(0, 102, 51, 0.4)'; this.style.filter='brightness(1.1)';"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(0, 102, 51, 0.3)'; this.style.filter='none';"
+               onmousedown="this.style.transform='translateY(-1px)';">
+                <span>Iniciar Simulado Geral</span>
+            </button>
+        </div>
+
+        <div id="mensagem-bloqueio" style="
+            display: none;
+            color: #EF4444;
+            background-color: #FEF2F2;
+            border: 1px solid #FCA5A5;
+            padding: 14px 20px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 15px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: balanco 0.4s ease;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05);
+        ">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.05rem;"></i>
+            Simulado Bloqueado! Você precisa concluir 100% de todos os blocos de Matemática e Português primeiro.
+        </div>
+
+        <div class="ranking-container-embutido" style="max-width: 100%; margin-top: 2.5rem; margin-bottom: 2rem;">
+            <div class="header-ranking-embutido" style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-trophy" style="color: #ffcc00; font-size: 1.8rem;"></i>
+                    </div>
+                    <div>
+                        <h2 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: #1a1a1a;">Líderes do Estudo Ativo</h2>
+                        <p style="margin: 2px 0 0 0; font-size: 0.85rem; color: #64748b;">Estudantes focados que mais estão acertando questões na plataforma!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ranking-list" style="background: #ffffff; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; overflow: hidden; padding: 5px 0;">
+                {% for aluno in ranking %}
+
+                <div class="ranking-item {% if loop.index == 1 %}primeiro-lugar-brilhante{% endif %}" style="display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.8rem; border-bottom: 1px solid #f1f5f9; transition: background 0.2s;">
+                    <div class="perfil-lado" style="display: flex; align-items: center; gap: 1.5rem;">
+
+                        <div class="posicao" style="font-weight: 700; font-size: 1.1rem; width: 35px; text-align: center; color: #64748b;">
+                            {% if loop.index == 1 %}
+                                <i class="fas fa-medal" style="color: #d4af37; font-size: 1.5rem; filter: drop-shadow(0 2px 4px rgba(212,175,55,0.2));"></i>
+                            {% elif loop.index == 2 %}
+                                <i class="fas fa-medal" style="color: #aaa9ad; font-size: 1.3rem;"></i>
+                            {% elif loop.index == 3 %}
+                                <i class="fas fa-medal" style="color: #b48a53; font-size: 1.2rem;"></i>
+                            {% else %}
+                                #{{ loop.index }}
+                            {% endif %}
+                        </div>
+
+                        <div class="info-aluno">
+                            <h3 style="margin: 0; font-size: 1.05rem; font-weight: 600; color: #1a1a1a;">{{ aluno['nome'] }}</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b; display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-school" style="color: #006633; font-size: 0.75rem;"></i>
+                                {{ aluno['escola'] if aluno['escola'] else 'Não informada' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pontuacao-badge" style="
+                        background: {% if loop.index == 1 %}#fffbeb{% else %}#e6f0eb{% endif %};
+                        color: {% if loop.index == 1 %}#d97706{% else %}var(--verde){% endif %};
+                        border: {% if loop.index == 1 %}1px solid #fef3c7{% else %}none{% endif %};
+                        font-weight: 700; padding: 6px 14px; border-radius: 30px; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">
+                        {{ aluno['pontuacao'] }} <span style="font-size: 0.75rem; font-weight: 500; color: #64748b;">PTS</span>
+                    </div>
+                </div>
+                {% else %}
+                <div style="padding: 2.5rem; text-align: center; color: #64748b;">
+                    <i class="fas fa-star" style="font-size: 1.5rem; color: #ffcc00; margin-bottom: 8px;"></i>
+                    <p style="margin: 0; font-size: 0.9rem;">Nenhum aluno pontuou ainda no ranking.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function verificarAcessoSimulado() {
+            // Obtém as variáveis passadas dinamicamente pelo Flask
+            let progressoMatematica = Number("{{ progresso_mat if progresso_mat else 0 }}");
+            let progressoPortugues = Number("{{ progresso_port if progresso_port else 0 }}");
+
+            let aviso = document.getElementById('mensagem-bloqueio');
+
+            if (progressoMatematica < 100 || progressoPortugues < 100) {
+                // Torna o elemento visível integrando-o ao grid de elementos abaixo da chamada
+                aviso.style.display = 'flex';
+
+                // Reinicia o gatilho da animação CSS de balanço para caso clique seguidamente
+                aviso.style.animation = 'none';
+                setTimeout(() => { aviso.style.animation = ''; }, 10);
+            } else {
+                // Se preenchidos os requisitos, avança diretamente para a rota do simulado
+                window.location.href = "/simulado";
+            }
+        }
+    </script>
+</body>
+</html>

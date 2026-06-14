@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel ADM | Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; margin: 0; padding: 40px; }
+        .admin-container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        h1 { color: #2dad4d; border-bottom: 2px solid #f4c015; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; background: #f4f7f6; padding: 15px; color: #444; }
+        td { padding: 15px; border-bottom: 1px solid #eee; color: #666; }
+        tr:hover { background: #f9fffb; }
+        .badge { background: #2dad4d; color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Painel de Controle - Alunos Cadastrados</h1>
+        <p>Lista de estudantes inscritos na plataforma de Oeiras.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Escola</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aluno in alunos %}
+                <tr>
+                    <td>#{{ aluno[0] }}</td>
+                    <td><strong>{{ aluno[1] }}</strong></td>
+                    <td>{{ aluno[2] }}</td>
+                    <td>{{ aluno[3] }}</td>
+                    <td><span class="badge">{{ aluno[4] }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="/dashboard" style="color: #2dad4d; text-decoration: none; font-weight: bold;">← Voltar ao Dashboard</a>
+    </div>
+</body>
+</html>

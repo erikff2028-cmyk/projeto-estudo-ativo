@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Desempenho - Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-principal: #F8FAFC;
+            --ifpi-verde: #006633;
+            --ifpi-escuro: #004d26;
+            --ifpi-ouro: #D4AF37;
+            --texto-escuro: #0F172A;
+            --texto-mutado: #64748B;
+            --card-bg: #FFFFFF;
+            --borda-suave: #E2E8F0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-principal); color: var(--texto-escuro); padding-bottom: 60px; }
+
+        /* Topbar Futurista */
+        .topbar { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--borda-suave); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; sticky: top; top: 0; z-index: 100; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02); }
+        .logo { font-weight: 800; color: var(--ifpi-verde); font-size: 1.3rem; text-decoration: none; letter-spacing: -0.5px; }
+
+        .container { max-width: 1040px; margin: 40px auto; padding: 0 24px; }
+
+        /* Header da Página */
+        .page-header { margin-bottom: 35px; }
+        .page-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--texto-escuro); letter-spacing: -0.5px; }
+        .page-header p { color: var(--texto-mutado); font-size: 0.95rem; margin-top: 4px; }
+
+        /* Card de Visão Geral - Estilo Glassmorphism Tridimensional */
+        .hero-card {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .hero-card::before { content: ''; position: absolute; top: -50%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,102,51,0.25) 0%, transparent 70%); pointer-events: none; }
+
+        .hero-text h1 { font-size: 1.6rem; color: #FFFFFF; font-weight: 800; letter-spacing: -0.3px; }
+        .hero-text p { color: #94A3B8; font-size: 1rem; margin-top: 6px; max-width: 500px; line-height: 1.5; }
+
+        /* Badge de Status Customizado */
+        .status-container { margin-top: 20px; display: inline-flex; }
+        .status-badge { padding: 8px 18px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .status-bom { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .status-medio { background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .status-critico { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+
+        /* Super Placar de Nota Metrificado */
+        .score-panel { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px 35px; border-radius: 16px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .score-panel .number { font-size: 3rem; font-weight: 900; color: #FFFFFF; line-height: 1; font-family: 'Inter', sans-serif; background: linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .score-panel .label { font-size: 0.75rem; color: #94A3B8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; display: block; }
+
+        /* Grid Organizacional de Disciplinas */
+        .grid-disciplinas { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .subject-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--borda-suave); padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .subject-card:hover { transform: translateY(-4px); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.05); }
+
+        .subject-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #F1F5F9; }
+        .subject-title { font-size: 1.2rem; font-weight: 800; color: var(--texto-escuro); display: flex; align-items: center; gap: 10px; }
+        .subject-title i { font-size: 1.3rem; }
+        .icon-mat { color: var(--ifpi-verde); }
+        .icon-port { color: #2563EB; }
+
+        .subject-average { font-weight: 700; color: var(--texto-mutado); font-size: 0.85rem; background: #F1F5F9; padding: 6px 12px; border-radius: 8px; }
+
+        /* Fileiras de Tópicos e Barras de Carga Avançadas */
+        .topic-row { margin-bottom: 22px; }
+        .topic-row:last-child { margin-bottom: 0; }
+        .topic-info { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; color: #334155; margin-bottom: 8px; }
+        .topic-info .percentage { font-weight: 700; color: var(--texto-escuro); }
+
+        /* Container Tridimensional da Barra */
+        .progress-bg { width: 100%; height: 10px; background: #E2E8F0; border-radius: 20px; overflow: hidden; padding: 2px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); }
+        .progress-fill { height: 100%; border-radius: 20px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+
+        /* Efeito de brilho reflexivo interno na barra */
+        .progress-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, rgba(255,255,255,0.15) 0%, transparent 50%); border-radius: 20px; }
+
+        .fill-mat { background: linear-gradient(90deg, #006633 0%, #10B981 100%); box-shadow: 0 2px 6px rgba(0, 102, 51, 0.2); }
+        .fill-port { background: linear-gradient(90deg, #1E40AF 0%, #3B82F6 100%); box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2); }
+
+        /* Botão Inferior de Retorno */
+        .navigation-footer { margin-top: 40px; text-align: left; }
+        .btn-voltar { display: inline-flex; align-items: center; gap: 8px; color: var(--texto-mutado); text-decoration: none; font-size: 0.95rem; font-weight: 600; padding: 10px 20px; border-radius: 10px; border: 1px solid var(--borda-suave); background: #FFFFFF; transition: all 0.2s ease; }
+        .btn-voltar:hover { color: var(--ifpi-verde); border-color: var(--ifpi-verde); background: rgba(0, 102, 51, 0.02); transform: translateX(-2px); }
+
+        /* Responsividade para Tablets e Smartphones */
+        @media (max-width: 850px) {
+            .hero-card { flex-direction: column; text-align: center; padding: 30px; gap: 25px; }
+            .hero-text p { margin-left: auto; margin-right: auto; }
+            .grid-disciplinas { grid-template-columns: 1fr; gap: 20px; }
+            .score-panel { width: 100%; max-width: 250px; }
+        }
+        @media (max-width: 480px) {
+            .topbar { padding: 15px 20px; }
+            .container { padding: 0 16px; margin: 25px auto; }
+            .hero-text h1 { font-size: 1.4rem; }
+            .subject-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <a href="/dashboard" class="logo">ESTUDO<span style="color: var(--ifpi-ouro);">ATIVO</span></a>
+    </div>
+
+    <div class="container">
+
+        <div class="page-header">
+            <h2>Métricas de Aprendizado</h2>
+            <p>Análise estatística em tempo real baseada no seu plano de estudos.</p>
+        </div>
+
+        <div class="hero-card">
+            <div class="hero-text">
+                <h1>Painel de Proficiência</h1>
+                <p>Seu índice analítico atualizado mede o progresso geral nas disciplinas nucleares para o Exame Classificatório do IFPI.</p>
+
+                <div class="status-container">
+                    <div class="status-badge {{ status_classe }}">
+                        <i class="fa-solid fa-circle-nodes"></i>
+                        <span>{{ status_aluno }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-panel">
+                <span class="number">{{ media_geral }}%</span>
+                <span class="label">Rendimento Total</span>
+            </div>
+        </div>
+
+        <div class="grid-disciplinas">
+
+            <div class="subject-card">
+                <div class="subject-header">
+                    <span class="subject-title">
+                        <i class="fa-solid fa-calculator icon-mat"></i>
+                        Matemática
+                    </span>
+                    <span class="subject-average">{{ media_mat }}% Concluído</span>
+                </div>
+
+                <div class="topic-row">
+                    <div class="topic-info">
+                        <span>Porcentagem</span>
+                        <span class="percentage">{{ materias.porcentagem }}%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-mat" style="width: {{ materias.porcentagem }}%;"></div>
+                    </div>
+                </div>
+
+                <div class="topic-row">
+                    <div class="topic-info">
+                        <span>Equações de 1º Grau</span>
+                        <span class="percentage">{{ materias.equacoes }}%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-mat" style="width: {{ materias.equacoes }}%;"></div>
+                    </div>
+                </div>
+
+                <div class="topic-row">
+                    <div class="topic-info">
+                        <span>Geometria Plana</span>
+                        <span class="percentage">{{ materias.geometria }}%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-mat" style="width: {{ materias.geometria }}%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subject-card">
+                <div class="subject-header">
+                    <span class="subject-title">
+                        <i class="fa-solid fa-pen-nib icon-port"></i>
+                        Língua Portuguesa
+                    </span>
+                    <span class="subject-average">{{ media_port }}% Concluído</span>
+                </div>
+
+                <div class="topic-row">
+                    <div class="topic-info">
+                        <span>Interpretação de Texto</span>
+                        <span class="percentage">{{ materias.interpretacao }}%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-port" style="width: {{ materias.interpretacao }}%;"></div>
+                    </div>
+                </div>
+
+                <div class="topic-row">
+                    <div class="topic-info">
+                        <span>Gramática e Ortografia</span>
+                        <span class="percentage">{{ materias.gramatica }}%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-port" style="width: {{ materias.gramatica }}%;"></div>
+                    </div>
+                </div>
+
+                <div class="topic-row">
+                    <div class="topic-info">
+                        <span>Sintaxe da Oração</span>
+                        <span class="percentage">{{ materias.sintaxe }}%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-port" style="width: {{ materias.sintaxe }}%;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="navigation-footer">
+            <a href="/dashboard" class="btn-voltar">
+                <i class="fa-solid fa-arrow-left"></i>
+                Painel Principal
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Geral Bloqueado - Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #F4F6F9; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+
+        .card-bloqueio { background: #FFFFFF; max-width: 550px; width: 100%; border-radius: 16px; border: 1px solid #E2E8F0; padding: 40px; text-align: center; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+
+        .icone-cadeado { font-size: 4.5rem; margin-bottom: 20px; color: #D4AF37; display: inline-block; animation: balanco 1s ease-in-out infinite alternate; }
+        @keyframes balanco { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+
+        h1 { color: #2C3E50; font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; }
+        p { color: #64748B; font-size: 1rem; line-height: 1.6; margin-bottom: 30px; }
+
+        .btn-voltar { display: inline-block; background-color: #006633; color: #ffffff; font-size: 0.95rem; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 102, 51, 0.15); transition: all 0.2s ease-in-out; border: none; cursor: pointer; }
+        .btn-voltar:hover { background-color: #004d26; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <div class="card-bloqueio">
+        <div class="icone-cadeado">🔒</div>
+        <h1>Simulado Geral Bloqueado</h1>
+        <p>
+            A jornada rumo ao <strong>IFPI 2027</strong> ainda não terminou!<br>
+            Para liberar o seu Simulado Geral Completo com 40 questões, você precisa concluir 100% dos blocos de treinamento em Matemática e Língua Portuguesa primeiro.
+        </p>
+        <a href="/dashboard" class="btn-voltar">Voltar para o Painel</a>
+    </div>
+
+</body>
+</html>

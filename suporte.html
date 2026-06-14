@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suporte - Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #F4F6F9; color: #2C3E50; display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* Topbar idêntica ao seu painel */
+        .topbar { background: #FFFFFF; border-bottom: 1px solid #E2E8F0; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .logo { font-weight: 700; color: #006633; font-size: 1.25rem; text-decoration: none; letter-spacing: -0.5px; }
+
+        /* Centralização do Card de Conteúdo */
+        .container { max-width: 600px; margin: auto; padding: 40px 20px; width: 100%; display: flex; justify-content: center; align-items: center; flex: 1; }
+        .card { background: #FFFFFF; border-radius: 16px; border: 1px solid #E2E8F0; padding: 40px; text-align: center; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); width: 100%; }
+
+        .icon-suporte { font-size: 3.5rem; margin-bottom: 20px; color: #006633; }
+        h1 { font-size: 1.6rem; font-weight: 700; color: #1E293B; margin-bottom: 12px; }
+        p { color: #64748B; font-size: 1rem; line-height: 1.6; margin-bottom: 30px; }
+
+        /* Botão de E-mail Premium com Degradê Verde Estudo Ativo */
+        .btn-email { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #006633 0%, #004d26 100%); color: #ffffff; font-size: 1rem; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 10px; box-shadow: 0 4px 14px rgba(0, 102, 51, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; max-width: 340px; cursor: pointer; }
+        .btn-email:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 102, 51, 0.4); filter: brightness(1.1); }
+
+        /* Link de Voltar Minimalista */
+        .btn-voltar { display: inline-block; margin-top: 25px; color: #64748B; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s; }
+        .btn-voltar:hover { color: #006633; text-decoration: underline; }
+
+        /* Ajustes de responsividade para telas de celulares */
+        @media (max-width: 480px) {
+            .topbar { padding: 15px 20px; }
+            .container { padding: 20px 15px; }
+            .card { padding: 30px 20px; border-radius: 12px; }
+            h1 { font-size: 1.4rem; }
+            p { font-size: 0.95rem; }
+            .btn-email { padding: 12px 24px; font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <a href="/dashboard" class="logo">ESTUDO<span style="color: #D4AF37;">ATIVO</span></a>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="icon-suporte">✉️</div>
+            <h1>Precisa de Ajuda?</h1>
+            <p>
+                Teve alguma dúvida sobre uma questão, encontrou algum erro na plataforma ou quer deixar um feedback? Fale diretamente comigo!
+            </p>
+
+            <a href="mailto:erikfernandodelimasousa@gmail.com?subject=Suporte%20-%20Plataforma%20Estudo%20Ativo" class="btn-email">
+                <span>Enviar E-mail de Suporte</span>
+                <span style="font-size: 1.1rem;">🚀</span>
+            </a>
+
+            <p style="margin-top: 25px; font-size: 0.9rem; color: #64748B; line-height: 1.4;">
+                Se preferir, copie o endereço manualmente:<br>
+                <strong style="color: #006633; font-size: 0.95rem;">erikfernandodelimasousa@gmail.com</strong>
+            </p>
+
+            <br>
+            <a href="/dashboard" class="btn-voltar">⬅ Voltar para o Painel</a>
+        </div>
+    </div>
+
+</body>
+</html>

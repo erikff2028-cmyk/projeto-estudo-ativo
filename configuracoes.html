@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações Avançadas | Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-principal: #F8FAFC;
+            --ifpi-verde: #006633;
+            --ifpi-escuro: #004d26;
+            --ifpi-ouro: #D4AF37;
+            --texto-escuro: #0F172A;
+            --texto-mutado: #64748B;
+            --card-bg: #FFFFFF;
+            --borda-suave: #E2E8F0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-principal); color: var(--texto-escuro); padding-bottom: 60px; }
+
+        /* Topbar com Desfoque de Vidro */
+        .topbar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--borda-suave);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+        }
+        .logo { font-weight: 800; color: var(--ifpi-verde); font-size: 1.3rem; text-decoration: none; letter-spacing: -0.5px; }
+
+        .btn-voltar {
+            text-decoration: none; color: var(--texto-mutado);
+            font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 8px; border: 1px solid var(--borda-suave);
+            background: #FFFFFF; transition: all 0.2s ease;
+        }
+        .btn-voltar:hover { color: var(--ifpi-verde); border-color: var(--ifpi-verde); transform: translateX(-2px); }
+
+        .container-config { max-width: 700px; margin: 40px auto; padding: 0 24px; }
+
+        /* Cabeçalho */
+        .page-header { margin-bottom: 35px; }
+        .page-header h1 { font-size: 1.8rem; font-weight: 800; color: var(--texto-escuro); letter-spacing: -0.5px; }
+        .page-header p { color: var(--texto-mutado); font-size: 0.95rem; margin-top: 4px; }
+
+        /* Blocos de Sessões */
+        .config-box {
+            background: var(--card-bg); border-radius: 20px; border: 1px solid var(--borda-suave);
+            padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02); margin-bottom: 30px;
+        }
+
+        .config-box h2 {
+            font-size: 0.85rem; color: var(--ifpi-verde); font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* Itens Internos */
+        .config-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 0; border-bottom: 1px solid #F1F5F9;
+        }
+        .config-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .config-item:first-child { padding-top: 0; }
+
+        .config-flex { display: flex; align-items: center; gap: 16px; }
+        .config-icon {
+            width: 42px; height: 42px; background: #F1F5F9; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--texto-mutado); font-size: 1.1rem; transition: all 0.3s ease;
+        }
+        .config-item:hover .config-icon { background: rgba(0, 102, 51, 0.08); color: var(--ifpi-verde); }
+
+        .config-info h4 { margin: 0; font-size: 1rem; font-weight: 600; color: var(--texto-escuro); }
+        .config-info p { margin: 4px 0 0 0; font-size: 0.85rem; color: var(--texto-mutado); line-height: 1.4; }
+
+        /* Switch Toggle Futurista */
+        .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #CBD5E1; transition: .3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 30px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+            background-color: white; transition: .3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input:checked + .slider { background: linear-gradient(135deg, #006633 0%, #10B981 100%); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* Botão de Salvar Premium */
+        .btn-salvar {
+            width: 100%; background: linear-gradient(135deg, var(--ifpi-verde) 0%, var(--ifpi-escuro) 100%);
+            color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(0, 102, 51, 0.3);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-salvar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 51, 0.4);
+            filter: brightness(1.1);
+        }
+        .btn-salvar:active { transform: translateY(0); }
+
+        @media (max-width: 480px) {
+            .topbar { padding: 15px 20px; }
+            .container-config { padding: 0 16px; margin: 25px auto; }
+            .config-box { padding: 20px; border-radius: 16px; }
+            .config-flex { gap: 12px; }
+            .config-icon { width: 36px; height: 36px; font-size: 0.95rem; }
+            .config-info h4 { font-size: 0.95rem; }
+            .config-info p { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <a href="/dashboard" class="logo">ESTUDO<span style="color: var(--ifpi-ouro);">ATIVO</span></a>
+        <a href="/dashboard" class="btn-voltar"><i class="fas fa-arrow-left"></i> Painel</a>
+    </div>
+
+    <div class="container-config">
+
+        <div class="page-header">
+            <h1>Configurações do Sistema</h1>
+            <p>Gerencie sua experiência de aprendizado no preparatório do IFPI.</p>
+        </div>
+
+        <div class="config-box">
+            <h2><i class="fa-solid fa-graduation-cap"></i> Preferências de Estudo</h2>
+
+            <div class="config-item">
+                <div class="config-flex">
+                    <div class="config-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="config-info">
+                        <h4>Modo Simulado</h4>
+                        <p>Ativar cronômetro de tempo durante a resolução de questões.</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="config-item">
+                <div class="config-flex">
+                    <div class="config-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <div class="config-info">
+                        <h4>Dicas Automáticas</h4>
+                        <p>Exibir explicações pedagógicas imediatamente após um erro.</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="config-box">
+            <h2><i class="fa-solid fa-shield-halved"></i> Privacidade e Conta</h2>
+
+            <div class="config-item">
+                <div class="config-flex">
+                    <div class="config-icon"><i class="fa-solid fa-trophy"></i></div>
+                    <div class="config-info">
+                        <h4>Perfil Público</h4>
+                        <p>Permitir que seu nome e escola apareçam no ranking geral de Oeiras.</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="config-item">
+                <div class="config-flex">
+                    <div class="config-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+                    <div class="config-info">
+                        <h4>E-mails de Lembrete</h4>
+                        <p>Receber notificações sobre a abertura de novos simulados gerais.</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <button class="btn-salvar">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Salvar Alterações
+        </button>
+    </div>
+
+</body>
+</html>

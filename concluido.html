@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etapa Concluída! | Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0; font-family: 'Inter', sans-serif;
+            background-color: #f8fbf9; display: flex;
+            align-items: center; justify-content: center; min-height: 100vh;
+        }
+        .success-card {
+            background: white; border-radius: 24px; padding: 3.5rem 2.5rem;
+            text-align: center; max-width: 500px; width: 90%;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .icon-circle {
+            width: 90px; height: 90px; background: #e6f0eb;
+            color: #006633; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            font-size: 2.5rem; margin: 0 auto 1.5rem auto;
+        }
+        h1 { color: #1a1a1a; font-size: 1.75rem; margin-bottom: 0.5rem; }
+        .badge {
+            background: #fffbeb; color: #d97706; padding: 4px 12px;
+            border-radius: 30px; font-weight: 700; font-size: 0.85rem;
+            border: 1px solid #fef3c7; display: inline-block; margin-bottom: 1.5rem;
+        }
+        p { color: #64748b; line-height: 1.6; font-size: 1.05rem; margin-bottom: 2.5rem; }
+        .btn-group { display: flex; flex-direction: column; gap: 1rem; }
+        .btn {
+            padding: 1rem; border-radius: 12px; font-weight: 700;
+            text-decoration: none; font-size: 1rem; display: flex;
+            align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #006633; color: white; box-shadow: 0 4px 12px rgba(0,66,51,0.15); }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-secondary { background: transparent; color: #64748b; border: 2px solid #e2e8f0; }
+        .btn-secondary:hover { background: #f8fafc; color: #1a1a1a; }
+    </style>
+</head>
+<body>
+
+    <div class="success-card">
+        <div class="icon-circle">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h1>Etapa Finalizada!</h1>
+        <div class="badge">{{ tema_nome }}</div>
+        <p>Parabéns! Você completou com sucesso a jornada de 20 questões focadas neste conteúdo. Seu progresso foi salvo e computado no ranking!</p>
+
+        <div class="btn-group">
+            <a href="{{ url_voltar }}" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> {{ botao_texto }}
+            </a>
+
+            <a href="/dashboard" class="btn btn-secondary">
+                <i class="fas fa-columns"></i> Ir para o Painel Geral
+            </a>
+
+            <a href="/questoes/reiniciar/{{ tema_id }}" class="btn btn-secondary" style="margin-top: 5px; font-size: 0.85rem; border-color: transparent;">
+                <i class="fas fa-redo"></i> Responder novamente este módulo
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treinamento Focado | Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #006633;
+            --accent: #ffcc00;
+            --bg-light: #f8fbf9;
+            --white: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #dc2626;
+            --success: #16a34a;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-main); }
+        nav { padding: 1rem 5%; background: var(--white); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .btn-voltar { text-decoration: none; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 10px; transition: color 0.2s; }
+        .btn-voltar:hover { color: #1a1a1a; }
+        .container { max-width: 750px; margin: 3rem auto; padding: 0 1.5rem; }
+        .question-card { background: var(--white); border-radius: 20px; padding: 2.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--border); position: relative; overflow: hidden; }
+
+        .progress-bar-container { width: 100%; height: 6px; background: #e2e8f0; position: absolute; top: 0; left: 0; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #2dad4d); width: {{ porcentagem_barra }}%; transition: width 0.4s ease-in-out; }
+
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .origin-badge { background: #e6f0eb; color: var(--primary); font-weight: 700; font-size: 0.85rem; padding: 6px 14px; border-radius: 30px; }
+        .progress-indicator { font-weight: 700; color: #d97706; background: #fffbeb; padding: 4px 12px; border-radius: 8px; border: 1px solid #fef3c7; }
+        .enunciado { font-size: 1.15rem; line-height: 1.6; margin-bottom: 2rem; font-weight: 500; }
+        .alternativas-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+        .alternativa-item { display: flex; align-items: center; padding: 1.1rem 1.25rem; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.2s ease; font-weight: 500; }
+        .alternativa-item:hover { border-color: var(--primary); background-color: #f6faf8; }
+        .alternativa-item input { display: none; }
+        .letra-circulo { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; margin-right: 1rem; font-weight: 700; font-size: 0.9rem; background: var(--white); }
+
+        .alternativa-item.selecionada { border-color: var(--primary); background-color: #e6f0eb; }
+        .alternativa-item.selecionada .letra-circulo { background: var(--primary); color: var(--white); border-color: var(--primary); }
+        .alternativa-item.correta { border-color: var(--success) !important; background-color: #f0fdf4 !important; }
+        .alternativa-item.correta .letra-circulo { background: var(--success) !important; border-color: var(--success) !important; color: white; }
+        .alternativa-item.errada { border-color: var(--danger) !important; background-color: #fef2f2 !important; }
+        .alternativa-item.errada .letra-circulo { background: var(--danger) !important; border-color: var(--danger) !important; color: white; }
+
+        .btn-acao { width: 100%; color: var(--white); border: none; padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; box-sizing: border-box; }
+        .btn-responder { background: var(--primary); box-shadow: 0 4px 12px rgba(0, 102, 51, 0.2); }
+        .btn-responder:hover { transform: translateY(-2px); }
+        .btn-proxima { background: #d97706; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2); display: none; }
+        .btn-proxima:hover { transform: translateY(-2px); }
+        .feedback-painel { margin-top: 1.5rem; padding: 1.5rem; border-radius: 12px; display: none; }
+        .feedback-painel.mostrar { display: block; }
+        .feedback-sucesso { background-color: #f0fdf4; border: 1px solid var(--success); color: #166534; }
+        .feedback-erro { background-color: #fffbeb; border: 1px solid var(--accent); color: #92400e; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        {% if tema_id in ['porcentagem', 'equacoes', 'geometria'] %}
+            <a href="/matematica" class="btn-voltar">
+                <i class="fas fa-arrow-left"></i> Voltar para Matemática
+            </a>
+        {% elif tema_id in ['interpretacao', 'gramatica', 'sintaxe'] %}
+            <a href="/portugues" class="btn-voltar">
+                <i class="fas fa-arrow-left"></i> Voltar para Português
+            </a>
+        {% else %}
+            <a href="/dashboard" class="btn-voltar">
+                <i class="fas fa-arrow-left"></i> Voltar ao Painel Principal
+            </a>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        <div class="question-card">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill"></div>
+            </div>
+
+            <div class="question-header">
+                <span class="origin-badge">{{ tema_nome }}</span>
+                <span class="progress-indicator">Questão {{ numero_atual }} de 20</span>
+            </div>
+
+            <div class="enunciado">
+                {{ questao.enunciado }}
+            </div>
+
+            <form id="form-questao" onsubmit="return false;">
+                <div class="alternativas-list">
+                    <label class="alternativa-item">
+                        <input type="radio" name="resposta" value="A">
+                        <div class="letra-circulo">A</div>
+                        <span>{{ questao.alt_a }}</span>
+                    </label>
+                    <label class="alternativa-item">
+                        <input type="radio" name="resposta" value="B">
+                        <div class="letra-circulo">B</div>
+                        <span>{{ questao.alt_b }}</span>
+                    </label>
+                    <label class="alternativa-item">
+                        <input type="radio" name="resposta" value="C">
+                        <div class="letra-circulo">C</div>
+                        <span>{{ questao.alt_c }}</span>
+                    </label>
+                    <label class="alternativa-item">
+                        <input type="radio" name="resposta" value="D">
+                        <div class="letra-circulo">D</div>
+                        <span>{{ questao.alt_d }}</span>
+                    </label>
+                    <label class="alternativa-item">
+                        <input type="radio" name="resposta" value="E">
+                        <div class="letra-circulo">E</div>
+                        <span>{{ questao.alt_e }}</span>
+                    </label>
+                </div>
+
+                <button type="button" id="btn-verificar" class="btn-acao btn-responder" onclick="verificarResposta()">Verificar Resposta</button>
+
+                <a href="/questoes/avancar/{{ tema_id }}" id="btn-proxima" class="btn-acao btn-proxima">
+                    {% if numero_atual == 20 %}
+                        Finalizar Treinamento <i class="fas fa-flag-checkered"></i>
+                    {% else %}
+                        Próxima Questão <i class="fas fa-arrow-right"></i>
+                    {% endif %}
+                </a>
+            </form>
+
+            <div id="feedback" class="feedback-painel">
+                <strong id="feedback-titulo"></strong>
+                <p id="feedback-texto" style="margin-top: 8px; margin-bottom: 0;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Carrega as strings do Python/Jinja prevenindo erros de sintaxe ou quebras por aspas
+        const respostaCorreta = {{ questao.resposta_correta | tojson }};
+        const explicacaoDica = {{ questao.explicacao | tojson }};
+
+        const itens = document.querySelectorAll('.alternativa-item');
+        itens.forEach(item => {
+            item.addEventListener('click', () => {
+                itens.forEach(i => i.classList.remove('selecionada'));
+                item.classList.add('selecionada'); // CORRIGIDO: Alterado de .add para .classList.add
+                item.querySelector('input').checked = true;
+            });
+        });
+
+        function verificarResposta() {
+            const selecionado = document.querySelector('input[name="resposta"]:checked');
+            if (!selecionado) {
+                alert("Por favor, selecione uma opção antes de responder!");
+                return;
+            }
+
+            const respostaDoAluno = selecionado.value;
+            const itemSelecionado = selecionado.closest('.alternativa-item');
+            const painelFeedback = document.getElementById('feedback');
+            const tituloFeedback = document.getElementById('feedback-titulo');
+            const textoFeedback = document.getElementById('feedback-texto');
+
+            const btnVerificar = document.getElementById('btn-verificar');
+            const btnProxima = document.getElementById('btn-proxima');
+
+            // Bloqueia cliques adicionais para o aluno não alterar a opção após responder
+            itens.forEach(i => i.style.pointerEvents = 'none');
+            btnVerificar.style.display = 'none';
+            btnProxima.style.display = 'flex';
+
+            // SISTEMA VISUAL E ENVIO DE PONTUAÇÃO AO RANKING
+            if (respostaDoAluno === respostaCorreta) {
+                itemSelecionado.classList.add('correta');
+                painelFeedback.className = "feedback-painel feedback-sucesso mostrar";
+                tituloFeedback.innerHTML = "<i class='fas fa-check-circle'></i> Resposta Correta!";
+                textoFeedback.innerText = "Parabéns! Excelente linha de raciocínio.";
+
+                // CONEXÃO COM O BACKEND: Envia o acerto para computar o ponto
+                fetch('/questoes/computar_ponto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acertou: true })
+                });
+            } else {
+                itemSelecionado.classList.add('errada');
+                // Revela visualmente qual era a opção certa para fins pedagógicos
+                itens.forEach(i => {
+                    if(i.querySelector('input').value === respostaCorreta) {
+                        i.classList.add('correta');
+                    }
+                });
+                painelFeedback.className = "feedback-painel feedback-erro mostrar";
+                tituloFeedback.innerHTML = "<i class='fas fa-times-circle'></i> Resposta Incorreta";
+                textoFeedback.innerText = "Explicação: " + explicacaoDica;
+            }
+        }
+    </script>
+</body>
+</html>

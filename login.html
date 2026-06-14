@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso | Estudo Ativo Oeiras</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2dad4d;
+            --accent-yellow: #f4c015;
+            --text-dark: #333;
+            --text-light: #666;
+            --body-bg: #ffffff;
+            --error-red: #c62828;
+            --error-bg: #ffebee;
+            --success-green: #2e7d32;
+            --success-bg: #e8f5e9;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--body-bg);
+            height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .login-card {
+            background: #fff; padding: 40px; border-radius: 16px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+            width: 100%; max-width: 400px; text-align: center;
+            border: 1px solid #f0f0f0;
+        }
+
+        /* Estilo para Erros */
+        .alert-error {
+            background-color: var(--error-bg); color: var(--error-red);
+            padding: 12px; border-radius: 8px; margin-bottom: 20px;
+            border: 1px solid #ffcdd2; font-size: 14px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        /* Estilo para Sucesso */
+        .alert-success {
+            background-color: var(--success-bg); color: var(--success-green);
+            padding: 12px; border-radius: 8px; margin-bottom: 20px;
+            border: 1px solid #c8e6c9; font-size: 14px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        .logo-title { font-size: 26px; font-weight: 700; color: var(--text-dark); }
+        .logo-title span { color: var(--accent-yellow); }
+
+        h2 { color: var(--text-dark); margin: 15px 0 5px 0; font-size: 20px; }
+        p.subtitle { color: var(--text-light); font-size: 14px; margin-bottom: 25px; }
+
+        .input-group { text-align: left; margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 5px; }
+
+        input {
+            width: 100%; padding: 12px; border: 1px solid #ddd;
+            border-radius: 8px; box-sizing: border-box; transition: 0.3s;
+            font-size: 15px; background-color: #fafafa;
+        }
+
+        input:focus { border-color: var(--primary-green); outline: none; box-shadow: 0 0 0 2px rgba(45, 173, 77, 0.1); }
+
+        .btn-main {
+            width: 100%; padding: 14px; background-color: var(--primary-green);
+            color: white; border: none; border-radius: 8px; font-weight: 600;
+            cursor: pointer; margin-top: 10px; transition: 0.3s; text-transform: uppercase;
+        }
+
+        .btn-main:hover { background-color: #248a41; }
+
+        .divider { margin: 25px 0; color: #bbb; font-size: 12px; display: flex; align-items: center; }
+        .divider::before, .divider::after { content: ""; flex: 1; border-bottom: 1px solid #eee; }
+        .divider span { padding: 0 10px; }
+
+        .google-btn {
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid #dadce0; padding: 11px; border-radius: 8px;
+            cursor: pointer; background: white; text-decoration: none;
+            color: #3c4043; font-weight: 600; font-size: 14px;
+        }
+
+        .footer-action { margin-top: 25px; font-size: 14px; color: var(--text-light); }
+        .footer-action a { color: var(--primary-green); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo-title">ESTUDO<span>ATIVO</span></div>
+        <p style="font-size: 11px; color: #999; margin: 0; letter-spacing: 1px;">PORTAL DO ALUNO - OEIRAS</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert-{{ category }}">
+                {{ '' if category == 'success' else '⚠️' }} {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2>Acesse sua conta</h2>
+        <p class="subtitle">Insira seus dados para continuar estudando.</p>
+
+        <form action="{{ url_for('login_manual') }}" method="POST">
+           <div class="input-group">
+               <label>E-mail</label>
+               <input type="email" name="email" placeholder="Seu e-mail de aluno" required>
+           </div>
+           <div class="input-group">
+               <label>Senha</label>
+               <input type="password" name="senha" placeholder="Sua senha" required>
+           </div>
+           <button type="submit" class="btn-main">Entrar no Estudo Ativo</button>
+        </form>
+
+        <div class="divider"><span>ou acesse com</span></div>
+        <a href="{{ url_for('google_login') }}" class="google-btn">
+            <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" width="20px" style="margin-right: 10px;">
+            Entrar com Google
+        </a>
+        <div class="footer-action">
+            Ainda não tem uma conta? <a href="{{ url_for('cadastro') }}">Cadastre-se aqui</a>
+        </div>
+    </div>
+</body>
+</html>

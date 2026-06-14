@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil | Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-principal: #F8FAFC;
+            --ifpi-verde: #006633;
+            --ifpi-escuro: #004d26;
+            --ifpi-ouro: #D4AF37;
+            --texto-escuro: #0F172A;
+            --texto-mutado: #64748B;
+            --card-bg: #FFFFFF;
+            --borda-suave: #E2E8F0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-principal); color: var(--texto-escuro); padding-bottom: 60px; }
+
+        /* Topbar Premium */
+        .topbar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--borda-suave);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+        }
+        .logo { font-weight: 800; color: var(--ifpi-verde); font-size: 1.3rem; text-decoration: none; letter-spacing: -0.5px; }
+
+        .btn-voltar {
+            text-decoration: none; color: var(--texto-mutado);
+            font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 8px; border: 1px solid var(--borda-suave);
+            background: #FFFFFF; transition: all 0.2s ease;
+        }
+        .btn-voltar:hover { color: var(--ifpi-verde); border-color: var(--ifpi-verde); transform: translateX(-2px); }
+
+        .container-perfil { max-width: 650px; margin: 40px auto; padding: 0 24px; text-align: center; }
+
+        /* Card Principal do Perfil */
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--borda-suave);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        /* Banner decorativo atrás da foto */
+        .profile-banner {
+            height: 100px;
+            background: linear-gradient(135deg, var(--ifpi-verde) 0%, var(--ifpi-escuro) 100%);
+            position: relative;
+        }
+
+        /* Container do Avatar */
+        .avatar-container {
+            margin-top: -60px;
+            position: relative;
+            display: inline-block;
+            z-index: 2;
+        }
+
+        .foto-perfil {
+            width: 120px; height: 120px; border-radius: 50%;
+            border: 5px solid #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            object-fit: cover;
+            background: #fff;
+        }
+
+        .info-aluno { padding: 20px 30px 10px 30px; }
+        .info-aluno h1 { font-size: 1.6rem; font-weight: 800; color: var(--texto-escuro); letter-spacing: -0.5px; }
+        .info-aluno p { color: var(--texto-mutado); font-size: 0.95rem; margin-top: 6px; font-weight: 500; }
+
+        /* Grade de Informações */
+        .dados-lista {
+            text-align: left;
+            padding: 10px 35px 35px 35px;
+        }
+
+        .item-dado {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 0;
+            border-bottom: 1px solid #F1F5F9;
+        }
+        .item-dado:last-child { border: none; padding-bottom: 0; }
+
+        .dado-icon {
+            width: 40px; height: 40px; background: #F1F5F9; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--texto-mutado); font-size: 1.05rem;
+        }
+
+        .dado-conteudo { display: flex; flex-direction: column; width: 100%; }
+        .label { font-size: 0.75rem; color: var(--ifpi-verde); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .valor { font-size: 1rem; font-weight: 600; color: var(--texto-escuro); margin-top: 2px; }
+
+        /* Botão de Edição */
+        .btn-editar {
+            width: 100%; max-width: 250px;
+            background: linear-gradient(135deg, var(--ifpi-verde) 0%, var(--ifpi-escuro) 100%);
+            color: white; border: none; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(0, 102, 51, 0.25);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            text-decoration: none;
+        }
+        .btn-editar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 51, 0.35);
+            filter: brightness(1.1);
+        }
+        .btn-editar:active { transform: translateY(0); }
+
+        @media (max-width: 480px) {
+            .topbar { padding: 15px 20px; }
+            .container-perfil { padding: 0 16px; margin: 25px auto; }
+            .profile-card { border-radius: 20px; }
+            .dados-lista { padding: 10px 20px 25px 20px; }
+            .info-aluno h1 { font-size: 1.4rem; }
+            .item-dado { gap: 12px; padding: 16px 0; }
+            .dado-icon { width: 36px; height: 36px; font-size: 0.95rem; }
+            .valor { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <a href="/dashboard" class="logo">ESTUDO<span style="color: var(--ifpi-ouro);">ATIVO</span></a>
+        <a href="/dashboard" class="btn-voltar"><i class="fas fa-arrow-left"></i> Painel</a>
+    </div>
+
+    <div class="container-perfil">
+
+        <div class="profile-card">
+            <div class="profile-banner"></div>
+
+            <div class="avatar-container">
+                {% if usuario and usuario.picture %}
+                    <img src="{{ usuario.picture }}" class="foto-perfil" alt="Foto de Perfil">
+                {% elif session and session.get('usuario') and session['usuario'].get('picture') %}
+                    <img src="{{ session['usuario']['picture'] }}" class="foto-perfil" alt="Foto de Perfil">
+                {% else %}
+                    <img src="https://ui-avatars.com/api/?name={{ usuario.name if usuario else 'Estudante' }}&background=006633&color=fff&size=128" class="foto-perfil" alt="Iniciais">
+                {% endif %}
+            </div>
+
+            <div class="info-aluno">
+                <h1>{{ usuario.name if usuario else session['usuario']['name'] }}</h1>
+                <p><i class="fa-solid fa-bullseye" style="color: var(--ifpi-ouro); margin-right: 4px;"></i> Focado no Exame Classificatório IFPI</p>
+            </div>
+
+            <div class="dados-lista">
+
+                <div class="item-dado">
+                    <div class="dado-icon"><i class="fa-regular fa-envelope"></i></div>
+                    <div class="dado-conteudo">
+                        <span class="label">E-mail Cadastrado</span>
+                        <span class="valor">{{ usuario.email if usuario else session['usuario']['email'] }}</span>
+                    </div>
+                </div>
+
+                <div class="item-dado">
+                    <div class="dado-icon"><i class="fa-solid fa-school"></i></div>
+                    <div class="dado-conteudo">
+                        <span class="label">Instituição / Escola</span>
+                        <span class="valor">
+                            {% if session and session.get('usuario') and session['usuario'].get('escola') and session['usuario']['escola'] != 'Google Login' %}
+                                {{ session['usuario']['escola'] }}
+                            {% elif usuario and usuario.escola and usuario.escola != 'Google Login' %}
+                                {{ usuario.escola }}
+                            {% else %}
+                                Não informada
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="item-dado">
+                    <div class="dado-icon"><i class="fa-solid fa-shield-check" style="color: #10B981;"></i></div>
+                    <div class="dado-conteudo">
+                        <span class="label">Status do Acesso</span>
+                        <span class="valor" style="color: #10B981;">Conta Estudantil Ativa</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <a href="#" class="btn-editar">
+            <i class="fa-solid fa-user-pen"></i>
+            Editar Informações
+        </a>
+    </div>
+
+</body>
+</html>

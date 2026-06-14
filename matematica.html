@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemática | Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #006633;
+            --accent: #ffcc00;
+            --bg-light: #f8fbf9;
+            --white: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0; font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light); color: var(--text-main);
+        }
+
+        nav {
+            padding: 1rem 5%; background: var(--white);
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo {
+            font-weight: 700; font-size: 1.25rem; color: var(--text-main);
+            text-decoration: none; display: flex; align-items: center; gap: 8px;
+        }
+        .logo span { color: var(--accent); }
+
+        .btn-voltar {
+            text-decoration: none; color: var(--text-muted); font-weight: 500;
+            display: flex; align-items: center; gap: 6px; transition: color 0.2s;
+        }
+        .btn-voltar:hover { color: var(--primary); }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .header-section { margin-bottom: 40px; }
+        .header-section h1 { font-size: 2rem; margin: 0 0 10px 0; color: var(--text-main); }
+        .header-section p { color: var(--text-muted); margin: 0; }
+
+        .grid-topics { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+
+        .topic-card {
+            background: var(--white); border-radius: 16px; padding: 25px;
+            box-shadow: var(--shadow); text-decoration: none; color: inherit;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #e2e8f0;
+            position: relative; overflow: hidden;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary);
+        }
+
+        .card-icon {
+            width: 50px; height: 50px; background: rgba(0, 102, 51, 0.08);
+            color: var(--primary); border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px;
+        }
+
+        .level-badge {
+            position: absolute; top: 25px; right: 25px; font-size: 0.75rem;
+            font-weight: 600; padding: 4px 10px; border-radius: 20px;
+            background: #f1f5f9; color: #475569;
+        }
+
+        .topic-card h3 { margin: 0 0 10px 0; font-size: 1.2rem; }
+        .topic-card p { margin: 0 0 20px 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+
+        .card-footer { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/dashboard" class="logo"><i class="fas fa-graduation-cap"></i> ESTUDO<span>ATIVO</span></a>
+        <a href="/dashboard" class="btn-voltar"><i class="fas fa-arrow-left"></i> Voltar ao Painel</a>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Matemática</h1>
+            <p>Selecione um bloco temático para praticar suas 20 questões focadas no seletivo IFPI.</p>
+        </div>
+
+        <div class="grid-topics">
+            <a href="/questoes/porcentagem" class="topic-card">
+                <div>
+                    <span class="level-badge">Módulo 1</span>
+                    <div class="card-icon"><i class="fas fa-percent"></i></div>
+                    <h3>Porcentagem</h3>
+                    <p>Aprenda cálculos de descontos, juros simples e taxas percentuais aplicadas ao cotidiano.</p>
+                </div>
+                <div class="card-footer">Praticar agora <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <a href="/questoes/equacoes" class="topic-card">
+                <div>
+                    <span class="level-badge">Módulo 2</span>
+                    <div class="card-icon"><i class="fas fa-equals"></i></div>
+                    <h3>Equações de 1º Grau</h3>
+                    <p>Resolva problemas envolvendo incógnitas, distribuição de termos e balanço de equações.</p>
+                </div>
+                <div class="card-footer">Praticar agora <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <a href="/questoes/geometria" class="topic-card">
+                <div>
+                    <span class="level-badge">Módulo 3</span>
+                    <div class="card-icon"><i class="fas fa-draw-polygon"></i></div>
+                    <h3>Geometria Plana</h3>
+                    <p>Áreas, perímetros e propriedades matemáticas fundamentais das principais figuras geométricas.</p>
+                </div>
+                <div class="card-footer">Praticar agora <i class="fas fa-arrow-right"></i></div>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

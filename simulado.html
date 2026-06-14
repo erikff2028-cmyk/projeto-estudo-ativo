@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFPI Classificatório - Simulado Geral</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #F4F6F9; color: #2C3E50; padding-bottom: 50px; }
+
+        .topbar { background: #FFFFFF; border-bottom: 1px solid #E2E8F0; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .logo { font-weight: 700; color: #006633; font-size: 1.25rem; letter-spacing: -0.5px; }
+        .contador { font-weight: 600; font-size: 0.95rem; color: #64748B; background: #F1F5F9; padding: 6px 14px; border-radius: 20px; }
+
+        .progress-container { width: 100%; height: 6px; background-color: #E2E8F0; }
+        .progress-bar { height: 100%; background-color: #006633; width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .container { max-width: 850px; margin: 40px auto; padding: 0 20px; }
+        .card { background: #FFFFFF; border-radius: 16px; border: 1px solid #E2E8F0; padding: 40px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+
+        .badge { display: inline-block; padding: 6px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 24px; letter-spacing: 0.5px; }
+        .badge-mat { background: #E8F5E9; color: #006633; border: 1px solid #C8E6C9; }
+        .badge-por { background: #E3F2FD; color: #1565C0; border: 1px solid #BBDEFB; }
+
+        .enunciado { font-size: 1.2rem; font-weight: 600; line-height: 1.65; margin-bottom: 30px; color: #1E293B; }
+
+        .options-group { display: flex; flex-direction: column; gap: 14px; }
+        .option-item { display: flex; align-items: center; background: #FFFFFF; border: 1px solid #E2E8F0; padding: 18px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; user-select: none; }
+        .option-item:hover { background: #F8FAFC; border-color: #CBD5E1; }
+        .option-item.selected { background: #E8F5E9; border-color: #006633; box-shadow: inset 0 0 0 1px #006633; }
+        .option-item input { margin-right: 16px; accent-color: #006633; width: 20px; height: 20px; cursor: pointer; }
+        .option-text { font-size: 1rem; color: #334155; font-weight: 500; line-height: 1.5; }
+
+        .navigation { display: flex; justify-content: space-between; margin-top: 35px; border-top: 1px solid #F1F5F9; padding-top: 25px; }
+        .btn { padding: 12px 28px; border-radius: 8px; border: none; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .btn-prev { background: #F1F5F9; color: #475569; }
+        .btn-prev:hover { background: #E2E8F0; }
+        .btn-prev:disabled { opacity: 0.4; cursor: not-allowed; background: #F1F5F9; }
+        .btn-next { background: #006633; color: white; box-shadow: 0 4px 6px rgba(0, 102, 51, 0.15); }
+        .btn-next:hover { background: #005229; }
+        .btn-finish { background: #D4AF37; color: #1E293B; box-shadow: 0 4px 6px rgba(212, 175, 55, 0.2); }
+        .btn-finish:hover { background: #C19E2F; }
+
+        /* Sucesso Final Modernizado */
+        .success-screen { display: none; text-align: center; }
+        .trophy { font-size: 5.5rem; margin-bottom: 20px; animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { opacity: 0; transform: scale(0.5); 100% { opacity: 1; transform: scale(1); } }
+        .score-box { background: #F8FAFC; border: 1px solid #E2E8F0; padding: 25px; border-radius: 12px; margin: 25px auto; max-width: 340px; }
+        .score-box h3 { font-size: 2.5rem; color: #006633; margin-top: 5px; font-weight: 700; }
+        .mensagem-forte { font-size: 1.35rem; font-weight: 700; color: #006633; margin-top: 30px; line-height: 1.5; padding: 0 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="simulado-container">
+        <div class="topbar">
+            <div class="logo">ESTUDO<span style="color: #D4AF37;">ATIVO</span></div>
+            <div class="contador" id="num-questao">Questão 1 de 40</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="barra-progresso"></div>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <div id="badge-disciplina" class="badge badge-mat">Matemática</div>
+                <div class="enunciado" id="texto-enunciado">Carregando enunciado do exame simulado...</div>
+
+                <div class="options-group">
+                    <label class="option-item" onclick="selecionar(this)"><input type="radio" name="alt" value="A"><span class="option-text" id="txt-a"></span></label>
+                    <label class="option-item" onclick="selecionar(this)"><input type="radio" name="alt" value="B"><span class="option-text" id="txt-b"></span></label>
+                    <label class="option-item" onclick="selecionar(this)"><input type="radio" name="alt" value="C"><span class="option-text" id="txt-c"></span></label>
+                    <label class="option-item" onclick="selecionar(this)"><input type="radio" name="alt" value="D"><span class="option-text" id="txt-d"></span></label>
+                    <label class="option-item" onclick="selecionar(this)"><input type="radio" name="alt" value="E"><span class="option-text" id="txt-e"></span></label>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-prev" id="btn-voltar" onclick="anterior()">⬅ Anterior</button>
+                    <button class="btn btn-next" id="btn-avancar" onclick="proxima()">Próxima ➡</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container success-screen" id="tela-sucesso">
+        <div class="card" style="border-color: #D4AF37; border-width: 2px; padding: 50px 40px;">
+            <div class="trophy">🏆</div>
+            <h1 style="color: #006633; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px;">PARABÉNS!</h1>
+            <p style="color: #64748B; margin-top: 6px; font-size: 1.05rem;">Você concluiu o Simulado Geral com sucesso!</p>
+
+            <div class="score-box">
+                <span style="font-size: 0.95rem; color: #64748B; font-weight: 500;">Sua pontuação final:</span>
+                <h3 id="acertos-final">0 / 40</h3>
+                <p id="percentual-final" style="font-weight: 700; color: #2563EB; font-size: 1rem; margin-top: 8px;"></p>
+            </div>
+
+            <p class="mensagem-forte">
+                Você está preparado para o Exame Classificatório do IFPI 2027!
+            </p>
+            <p style="margin-top: 14px; color: #475569; font-size: 1rem; line-height: 1.6; max-width: 580px; margin-left: auto; margin-right: auto;">
+                Sua dedicação em todas as etapas valida o seu potencial extraordinário.<br>
+                Continue revisando as falhas e mantenha firme o foco na sua vaga!
+            </p>
+
+            <button class="btn btn-next" style="margin-top: 35px; padding: 14px 40px; font-size: 1rem;" onclick="window.location.href='/dashboard'">Voltar para o Painel de Estudo</button>
+        </div>
+    </div>
+
+    <script>
+        const questoes = {{ questoes|tojson }};
+        let indiceAtual = 0;
+        let respostasAluno = {};
+
+        function carregarQuestao() {
+            if (!questoes || questoes.length === 0) return;
+            const q = questoes[indiceAtual];
+
+            document.getElementById("num-questao").innerText = `Questão ${indiceAtual + 1} de ${questoes.length}`;
+            document.getElementById("barra-progresso").style.width = `${((indiceAtual + 1) / questoes.length) * 100}%`;
+            document.getElementById("texto-enunciado").innerText = q.enunciado;
+
+            const badge = document.getElementById("badge-disciplina");
+            if(['geometria', 'porcentagem', 'equacoes'].includes(q.tema)) {
+                badge.innerText = `Matemática — ${q.tema.toUpperCase()}`;
+                badge.className = "badge badge-mat";
+            } else {
+                badge.innerText = `Língua Portuguesa — ${q.tema.toUpperCase()}`;
+                badge.className = "badge badge-por";
+            }
+
+            document.getElementById("txt-a").innerText = q.alt_a;
+            document.getElementById("txt-b").innerText = q.alt_b;
+            document.getElementById("txt-c").innerText = q.alt_c;
+            document.getElementById("txt-d").innerText = q.alt_d;
+            document.getElementById("txt-e").innerText = q.alt_e;
+
+            document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('input[name="alt"]').forEach(el => el.checked = false);
+
+            if (respostasAluno[indiceAtual]) {
+                const valorSalvo = respostasAluno[indiceAtual];
+                const input = document.querySelector(`input[name="alt"][value="${valorSalvo}"]`);
+                if(input) {
+                    input.checked = true;
+                    input.parentElement.classList.add('selected');
+                }
+            }
+
+            document.getElementById("btn-voltar").disabled = indiceAtual === 0;
+            const btnAvancar = document.getElementById("btn-avancar");
+            if (indiceAtual === questoes.length - 1) {
+                btnAvancar.innerText = "Finalizar Simulado 🏁";
+                btnAvancar.className = "btn btn-finish";
+            } else {
+                btnAvancar.innerText = "Próxima ➡";
+                btnAvancar.className = "btn btn-next";
+            }
+        }
+
+        function selecionar(elemento) {
+            document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+            elemento.classList.add('selected');
+            const input = elemento.querySelector('input');
+            input.checked = true;
+            respostasAluno[indiceAtual] = input.value;
+        }
+
+        function anterior() {
+            if (indiceAtual > 0) {
+                indiceAtual--;
+                carregarQuestao();
+            }
+        }
+
+        function proxima() {
+            if (indiceAtual < questoes.length - 1) {
+                indiceAtual++;
+                carregarQuestao();
+            } else {
+                finalizarSimulado();
+            }
+        }
+
+        function finalizarSimulado() {
+            let acertos = 0;
+            questoes.forEach((q, idx) => {
+                if(respostasAluno[idx] === q.correta) {
+                    acertos++;
+                }
+            });
+
+            document.getElementById("simulado-container").style.display = "none";
+            document.getElementById("tela-sucesso").style.display = "block";
+
+            document.getElementById("acertos-final").innerText = `${acertos} / ${questoes.length}`;
+            let percentual = (acertos / questoes.length) * 100;
+            document.getElementById("percentual-final").innerText = `Aproveitamento: ${percentual.toFixed(1)}%`;
+        }
+
+        window.onload = carregarQuestao;
+    </script>
+</body>
+</html>

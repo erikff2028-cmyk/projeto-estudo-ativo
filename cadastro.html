@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | Estudo Ativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0; font-family: 'Inter', sans-serif;
+            background-color: #ffffff; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .login-card {
+            background: #fff; padding: 35px 40px; border-radius: 16px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08); width: 100%; max-width: 420px;
+            text-align: center; border: 1px solid #f0f0f0;
+        }
+        .logo-title { font-size: 26px; font-weight: 700; color: #333; }
+        .logo-title span { color: #f4c015; }
+        h2 { color: #333; margin: 15px 0 5px 0; font-size: 20px; }
+        .input-group { text-align: left; margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 5px; }
+        input, select {
+            width: 100%; padding: 12px; border: 1px solid #ddd;
+            border-radius: 8px; box-sizing: border-box; font-size: 14px; background-color: #fafafa;
+        }
+        .btn-main {
+            width: 100%; padding: 14px; background-color: #2dad4d;
+            color: white; border: none; border-radius: 8px; font-weight: 600;
+            cursor: pointer; margin-top: 15px; text-transform: uppercase;
+        }
+        .footer-action { margin-top: 20px; font-size: 14px; color: #666; }
+        .footer-action a { color: #2dad4d; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo-title">ESTUDO<span>ATIVO</span></div>
+        <h2>Criar nova conta</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Preencha os dados abaixo.</p>
+
+        <form action="{{ url_for('processar_cadastro') }}" method="POST">
+            <div class="input-group">
+                <label>Nome Completo</label>
+                <input type="text" name="nome" placeholder="Seu nome" required>
+            </div>
+            <div class="input-group">
+                <label>E-mail</label>
+                <input type="email" name="email" placeholder="aluno@exemplo.com" required>
+            </div>
+            <div class="input-group">
+                <label>Escola Municipal</label>
+                <select name="escola" required>
+                    <option value="" disabled selected>Selecione sua escola</option>
+                    <option value="Visconde da Parnaíba">E.M. Visconde da Parnaíba</option>
+                    <option value="Juarez Tapety">E.M. Juarez Tapety</option>
+                    <option value="Outra">Outra Escola de Oeiras</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Crie uma Senha</label>
+                <input type="password" name="senha" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            <button type="submit" class="btn-main">Concluir Cadastro</button>
+        </form>
+
+        <div class="footer-action">
+            Já tem uma conta? <a href="{{ url_for('login') }}">Faça login aqui</a>
+        </div>
+    </div>
+</body>
+</html>
